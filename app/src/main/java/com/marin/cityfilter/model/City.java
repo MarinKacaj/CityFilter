@@ -10,7 +10,7 @@ public class City {
     private String name;
     private GeoCoordinates coord;
 
-    public long get_id() {
+    public long getId() {
         return _id;
     }
 

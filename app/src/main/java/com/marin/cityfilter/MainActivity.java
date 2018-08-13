@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.marin.cityfilter.adapter.CitiesRVAdapter;
+import com.marin.cityfilter.adapter.CitiesAdapter;
 import com.marin.cityfilter.loader.CitiesLoader;
 import com.marin.cityfilter.model.City;
 
@@ -24,7 +23,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     private static final int LOADER_ID = 0;
     private TextView messageView;
     private SearchView searchBar;
-    private CitiesRVAdapter adapter;
+    private CitiesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +33,10 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         messageView = findViewById(R.id.message);
         searchBar = findViewById(R.id.search_bar);
         searchBar.setOnQueryTextListener(this);
-        adapter = new CitiesRVAdapter();
+        adapter = new CitiesAdapter();
 
-        RecyclerView recyclerView = findViewById(R.id.list);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        ListView cityList = findViewById(R.id.list);
+        cityList.setAdapter(adapter);
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
