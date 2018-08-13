@@ -2,11 +2,16 @@ package com.marin.cityfilter;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.marin.cityfilter.adapter.CitiesAdapter;
 import com.marin.cityfilter.loader.CitiesLoader;
@@ -37,6 +42,19 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
         final ListView cityList = findViewById(R.id.list);
         cityList.setAdapter(adapter);
+        cityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                City city = adapter.getItem(position);
+                Intent mapIntent = GMapUtil.gMapIntent(city);
+                PackageManager packageManager = getPackageManager();
+                if (mapIntent.resolveActivity(packageManager) != null) {
+                    startActivity(mapIntent);
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.no_map_app, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         loadCities("");
     }
 

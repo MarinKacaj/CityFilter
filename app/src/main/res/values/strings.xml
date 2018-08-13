@@ -3,4 +3,5 @@
     <string name="search">Search</string>
     <string name="loading">Loading&#8230;</string>
     <string name="error">Error</string>
+    <string name="no_map_app">Could not find Google Maps app</string>
 </resources>

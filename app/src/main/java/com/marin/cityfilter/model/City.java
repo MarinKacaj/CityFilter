@@ -1,7 +1,5 @@
 package com.marin.cityfilter.model;
 
-import java.util.Locale;
-
 /**
  * @author Marin Kacaj
  */
@@ -28,7 +26,7 @@ public class City implements Comparable<City> {
 
     public String getFullName() {
         if (null == fullName) {
-            fullName = String.format(Locale.ENGLISH, "%s, %s", getName(), getCountry());
+            fullName = String.format("%s, %s", getName(), getCountry());
         }
         return fullName;
     }
