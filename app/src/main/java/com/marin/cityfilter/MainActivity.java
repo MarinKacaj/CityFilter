@@ -73,6 +73,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<Collection<City>> loader) {
+        adapter.none();
     }
 
     @Override
