@@ -40,6 +40,6 @@ public class City implements Comparable<City> {
     @Override
     public int compareTo(City city) {
         // will throw NPE, per Comparable#compareTo java docs
-        return getFullName().compareTo(city.getFullName());
+        return getFullName().compareToIgnoreCase(city.getFullName());
     }
 }

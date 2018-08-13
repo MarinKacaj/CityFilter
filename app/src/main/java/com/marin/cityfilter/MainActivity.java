@@ -12,15 +12,15 @@ import com.marin.cityfilter.adapter.CitiesAdapter;
 import com.marin.cityfilter.loader.CitiesLoader;
 import com.marin.cityfilter.model.City;
 
-import java.util.List;
+import java.util.Collection;
 
 import static com.marin.cityfilter.ViewUtil.gone;
 import static com.marin.cityfilter.ViewUtil.visible;
 
-public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<List<City>>,
+public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Collection<City>>,
         SearchView.OnQueryTextListener {
 
-    private static final int LOADER_ID = 0;
+    private static final int CITIES_LOADER_ID = 0;
     private TextView messageView;
     private SearchView searchBar;
     private CitiesAdapter adapter;
@@ -35,9 +35,13 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         searchBar.setOnQueryTextListener(this);
         adapter = new CitiesAdapter();
 
-        ListView cityList = findViewById(R.id.list);
+        final ListView cityList = findViewById(R.id.list);
         cityList.setAdapter(adapter);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        loadCities("");
+    }
+
+    private void loadCities(String prefix) {
+        CitiesLoader.start(CITIES_LOADER_ID, prefix, this, getLoaderManager());
     }
 
     private CityFilterApp cityFilterApp() {
@@ -45,12 +49,16 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public Loader<List<City>> onCreateLoader(int i, Bundle bundle) {
-        return new CitiesLoader(this, cityFilterApp().getGson());
+    public Loader<Collection<City>> onCreateLoader(int id, Bundle args) {
+        if (CITIES_LOADER_ID == id) {
+            return CitiesLoader.obtain(this, args, cityFilterApp().getGson());
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public void onLoadFinished(Loader<List<City>> loader, List<City> cities) {
+    public void onLoadFinished(Loader<Collection<City>> loader, Collection<City> cities) {
         if (null == cities) {
             visible(messageView);
             gone(searchBar);
@@ -64,16 +72,19 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public void onLoaderReset(Loader<List<City>> loader) {
+    public void onLoaderReset(Loader<Collection<City>> loader) {
     }
 
     @Override
-    public boolean onQueryTextSubmit(String s) {
+    public boolean onQueryTextSubmit(String query) {
+        loadCities(query);
         return true; // query performed here
     }
 
     @Override
-    public boolean onQueryTextChange(String s) {
+    public boolean onQueryTextChange(String query) {
+        loadCities(query);
         return true; // no search-bar suggestions required
     }
+
 }

@@ -1,46 +1,62 @@
 package com.marin.cityfilter.loader;
 
+import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.content.Loader;
+import android.os.Bundle;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.marin.cityfilter.model.City;
+import com.marin.cityfilter.prefixtrie.CityPrefixTrie;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author Marin Kacaj
  */
-public class CitiesLoader extends AsyncTaskLoader<List<City>> {
+public class CitiesLoader extends AsyncTaskLoader<Collection<City>> {
+
+    private static final String KEY_PREFIX = "city.name.prefix";
 
     private Gson gson;
+    private final String prefix;
 
-    public CitiesLoader(Context context, Gson gson) {
+    public CitiesLoader(Context context, Gson gson, String prefix) {
         super(context);
         this.gson = gson;
+        this.prefix = prefix;
         forceLoad();
     }
 
-    @Override
-    public List<City> loadInBackground() {
-        List<City> cities;
-        try {
-            InputStream citiesStream = getContext().getAssets().open("cities.json");
-            Reader reader = new InputStreamReader(citiesStream, "UTF-8");
-            Type listType = new TypeToken<List<City>>() {
-            }.getType();
-            cities = gson.fromJson(reader, listType);
-            Collections.sort(cities);
-        } catch (IOException e) {
-            cities = null;
+    public static CitiesLoader obtain(Context context, Bundle args, Gson gson) {
+        String prefix = args.getString(KEY_PREFIX);
+        return new CitiesLoader(context, gson, prefix);
+    }
+
+    public static void start(int loaderId, String prefix,
+                             LoaderManager.LoaderCallbacks<Collection<City>> callbacks,
+                             LoaderManager loaderManager) {
+        Bundle args = new Bundle();
+        args.putString(KEY_PREFIX, prefix);
+        Loader<Collection<City>> loader = loaderManager.getLoader(loaderId);
+        if (loader != null && !loader.isReset()) {
+            loaderManager.restartLoader(loaderId, args, callbacks);
+        } else {
+            loaderManager.initLoader(loaderId, args, callbacks);
         }
-        return cities;
+    }
+
+    @Override
+    public Collection<City> loadInBackground() {
+        Collection<City> filteredSortedCities;
+        try {
+            CityPrefixTrie cityPrefixTrie = CitiesProvider.cityPrefixTrie(getContext(), gson);
+            filteredSortedCities = cityPrefixTrie.getValuesWithPrefix(prefix);
+        } catch (IOException e) {
+            filteredSortedCities = null;
+        }
+        return filteredSortedCities;
     }
 }

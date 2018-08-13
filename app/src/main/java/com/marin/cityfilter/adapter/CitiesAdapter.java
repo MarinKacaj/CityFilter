@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.marin.cityfilter.model.City;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class CitiesAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
-    public void cities(List<City> cities) {
+    public void cities(Collection<City> cities) {
         this.cities.clear();
         this.cities.addAll(cities);
         this.notifyDataSetChanged();
