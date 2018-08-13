@@ -10,7 +10,6 @@ import com.marin.cityfilter.model.City;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Marin Kacaj
@@ -74,8 +73,7 @@ public class CitiesAdapter extends BaseAdapter {
         }
 
         void bind(City city) {
-            String fullName = String.format(Locale.ENGLISH, "%s, %s", city.getName(), city.getCountry());
-            this.fullNameView.setText(fullName);
+            this.fullNameView.setText(city.getFullName());
         }
     }
 }

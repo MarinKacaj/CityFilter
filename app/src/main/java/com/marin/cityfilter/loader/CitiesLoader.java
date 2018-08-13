@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,6 +37,7 @@ public class CitiesLoader extends AsyncTaskLoader<List<City>> {
             Type listType = new TypeToken<List<City>>() {
             }.getType();
             cities = gson.fromJson(reader, listType);
+            Collections.sort(cities);
         } catch (IOException e) {
             cities = null;
         }
