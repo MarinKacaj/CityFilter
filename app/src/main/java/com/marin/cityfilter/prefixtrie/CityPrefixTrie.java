@@ -188,6 +188,8 @@ public class CityPrefixTrie implements Map<String, City> {
     public List<City> getValuesWithPrefix(String prefix) {
         Preconditions.checkNotNull(prefix, PREFIX_CANNOT_BE_NULL);
 
+        prefix = prefix.toLowerCase();
+
         PrefixTrieVisitor<List<City>> visitor = new PrefixTrieVisitor<List<City>>() {
             List<City> result = new ArrayList<>();
 

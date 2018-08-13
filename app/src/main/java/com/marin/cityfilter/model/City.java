@@ -12,6 +12,17 @@ public class City implements Comparable<City> {
 
     private transient String fullName;
 
+    // for gson reflection instantiation
+    public City() {
+    }
+
+    public City(long _id, String country, String name, GeoCoordinates coord) {
+        this._id = _id;
+        this.country = country;
+        this.name = name;
+        this.coord = coord;
+    }
+
     public long getId() {
         return _id;
     }
