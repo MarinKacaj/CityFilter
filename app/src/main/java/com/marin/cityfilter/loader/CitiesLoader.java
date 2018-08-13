@@ -27,7 +27,6 @@ public class CitiesLoader extends AsyncTaskLoader<Collection<City>> {
         super(context);
         this.gson = gson;
         this.prefix = prefix;
-        forceLoad();
     }
 
     public static CitiesLoader obtain(Context context, Bundle args, Gson gson) {
@@ -46,6 +45,12 @@ public class CitiesLoader extends AsyncTaskLoader<Collection<City>> {
         } else {
             loaderManager.initLoader(loaderId, args, callbacks);
         }
+    }
+
+    @Override
+    protected void onStartLoading() {
+        super.onStartLoading();
+        forceLoad();
     }
 
     @Override
