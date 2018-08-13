@@ -23,7 +23,7 @@ public class CitiesLoader extends AsyncTaskLoader<Collection<City>> {
     private Gson gson;
     private final String prefix;
 
-    public CitiesLoader(Context context, Gson gson, String prefix) {
+    private CitiesLoader(Context context, Gson gson, String prefix) {
         super(context);
         this.gson = gson;
         this.prefix = prefix;
