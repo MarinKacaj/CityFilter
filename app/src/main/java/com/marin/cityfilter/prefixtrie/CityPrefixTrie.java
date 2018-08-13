@@ -17,6 +17,7 @@ import java.util.TreeSet;
 public class CityPrefixTrie implements Map<String, City> {
 
     private static final String KEY_CANNOT_BE_NULL = "key cannot be null";
+    private static final String PREFIX_CANNOT_BE_NULL = "prefix cannot be null";
     private static final String KEYS_MUST_BE_STRING = "keys must be String instances";
     private static final String OP_NOT_NECESSARY = "Operation not necessary for use case";
 
@@ -97,13 +98,8 @@ public class CityPrefixTrie implements Map<String, City> {
 
     @Override
     public City get(final Object keyToCheck) {
-        if (keyToCheck == null) {
-            throw new NullPointerException(KEY_CANNOT_BE_NULL); // per Map#get docs
-        }
-
-        if (!(keyToCheck instanceof String)) {
-            throw new ClassCastException(KEYS_MUST_BE_STRING); // per Map#get docs
-        }
+        Preconditions.checkNotNull(keyToCheck, KEY_CANNOT_BE_NULL); // per Map#get docs
+        Preconditions.checkIsString(keyToCheck, KEYS_MUST_BE_STRING); // per Map#get docs
 
         PrefixTrieVisitor<City> visitor = new PrefixTrieVisitor<City>() {
             City result = null;
@@ -126,10 +122,7 @@ public class CityPrefixTrie implements Map<String, City> {
 
     @Override
     public City put(String key, City city) {
-        if (null == key) {
-            throw new NullPointerException(KEY_CANNOT_BE_NULL);
-        }
-
+        Preconditions.checkNotNull(key, KEY_CANNOT_BE_NULL);
         return put(key, city, root);
     }
 
@@ -193,9 +186,7 @@ public class CityPrefixTrie implements Map<String, City> {
     }
 
     public List<City> getValuesWithPrefix(String prefix) {
-        if (null == prefix) {
-            throw new NullPointerException("prefix cannot be null");
-        }
+        Preconditions.checkNotNull(prefix, PREFIX_CANNOT_BE_NULL);
 
         PrefixTrieVisitor<List<City>> visitor = new PrefixTrieVisitor<List<City>>() {
             List<City> result = new ArrayList<>();
