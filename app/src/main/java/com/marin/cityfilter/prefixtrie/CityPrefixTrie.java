@@ -12,6 +12,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
+ * This data structure enables searching for the next prefix char in const time with min complexity.
+ * Search (lookup) complexity depends on the (max) word length O(L).
+ * This low complexity fulfills search performance requirement. Hence the choice of this structure
+ *
  * @author Marin Kacaj
  */
 public class CityPrefixTrie implements Map<String, City> {
